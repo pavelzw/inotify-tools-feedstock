@@ -1,0 +1,46 @@
+schema_version: 1
+
+context:
+  version: "3.20.2"
+
+package:
+  name: inotify-tools
+  version: ${{ version }}
+
+source:
+  url: https://github.com/rvoicilas/inotify-tools/archive/${{ version }}.tar.gz
+  sha256: 5ef0519934ac99f58c217fce259832a4ed51e25ded64c8aaf1149791b2c9b2c7
+
+build:
+  number: 1
+  skip:
+    - not linux
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - ${{ stdlib('c') }}
+    - automake
+    - autoconf
+    - libtool
+    - make
+
+tests:
+  - script:
+      # --help returns 1
+      - inotifywatch --help || [[ $? == 1 ]]
+      - inotifywait --help || [[ $? == 1 ]]
+
+about:
+  homepage: https://github.com/inotify-tools/inotify-tools
+  license: GPL-2.0-only
+  license_file: COPYING
+  summary: This is a package of some commandline utilities relating to inotify.
+  description: |
+    The general purpose of this package is to allow inotify's features to be
+    used from within shell scripts.
+  documentation: https://github.com/inotify-tools/inotify-tools/wiki
+
+extra:
+  recipe-maintainers:
+    - keuv-grvl
